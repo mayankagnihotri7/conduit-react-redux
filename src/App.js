@@ -1,38 +1,26 @@
 import React, { Component } from "react";
-import { connect } from "react-redux";
-import { fetchArticle } from "./store/actions";
-import uuid from "react-uuid";
-import Tags from "./Tags";
+import { Switch, Route } from "react-router-dom";
+import Articles from "./components/Articles";
+import Header from "./components/Header";
+import Login from "./components/Login";
+import Error from "./components/Error";
+import SignUp from "./components/SignUp";
+import "./style.css";
 
 class App extends Component {
-  componentDidMount() {
-    this.props.dispatch(
-      fetchArticle(
-        "https://conduit.productionready.io/api/articles?limit=20&offset=0"
-      )
-    );
-  }
-
   render() {
-    const { articles } = this.props;
     return (
-      <div>
-        {articles.map((article) => {
-          return (
-            <li key={uuid()}>
-              <h2>{article.title}</h2>;
-              <p>{article.description}</p>
-            </li>
-          );
-        })}
-        <Tags />
-      </div>
+      <>
+        <Header />
+        <Switch>
+          <Route path="/" component={Articles} exact />
+          <Route path="/login" component={Login} />
+          <Route path="/register" component={SignUp} />
+          <Route component={Error} />
+        </Switch>
+      </>
     );
   }
 }
 
-function mapState({ articles }) {
-  return { articles };
-}
-
-export default connect(mapState)(App);
+export default App;

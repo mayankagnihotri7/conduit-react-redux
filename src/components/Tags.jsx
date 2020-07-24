@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import uuid from "react-uuid";
-import { allTags } from "./store/actions";
+import { allTags } from "../store/actions";
 
 class Tags extends Component {
   componentDidMount() {
