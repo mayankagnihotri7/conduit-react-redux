@@ -23,14 +23,12 @@ export function userLogin(url, payload, history) {
       body: JSON.stringify({ user: payload }),
     })
       .then((res) => {
-        console.log(res);
         if (res.status === 200 && res.statusText === "OK") {
           history.push("/");
           return res.json();
         }
       })
       .then((user) => {
-        console.log(user);
         user && localStorage.setItem("authToken", user.token);
         dispatch({ type: USER, payload: { ...user } });
       });
