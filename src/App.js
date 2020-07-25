@@ -9,6 +9,7 @@ import "./style.css";
 import UserProfile from "./components/UserProfile";
 import EditProfile from "./components/EditProfile";
 import NewArticle from "./components/NewArticle";
+import SingleArticle from "./components/SingleArticle";
 
 class App extends Component {
   render() {
@@ -21,6 +22,7 @@ class App extends Component {
           <Route path="/register" component={SignUp} />
           <Route path="/profile/:slug" component={UserProfile} />
           <Route path="/editProfile" component={EditProfile} />
+          <Route path="/articles/:slug" component={SingleArticle} />
           <Route path="/newArticle" component={NewArticle} />
           <Route component={Error} />
         </Switch>

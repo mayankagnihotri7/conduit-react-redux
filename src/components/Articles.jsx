@@ -34,7 +34,9 @@ class Articles extends Component {
                   </div>
                   <article className="news-card-article">
                     <h4 className="news-card-title">
-                      <Link to="/">{article.title}</Link>
+                      <Link to={`articles/${article.slug}`}>
+                        {article.title}
+                      </Link>
                     </h4>
                     <p className="news-card-description">
                       {article.description}

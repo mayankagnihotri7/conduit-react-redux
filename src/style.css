@@ -53,6 +53,13 @@ body {
   margin: 0rem 1rem;
 }
 
+.text-centre {
+  text-align: center;
+  color: cornflowerblue;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
+    Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+}
+
 /* User profile */
 
 .card-user-profile {
