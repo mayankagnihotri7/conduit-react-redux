@@ -15,6 +15,26 @@ export function fetchArticle(url) {
   };
 }
 
+export function addArticle(url, payload, history) {
+  return function (dispatch) {
+    fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        authorization: `Token ${localStorage.authToken}`,
+      },
+      body: JSON.stringify({ article: payload }),
+    })
+      .then((res) => {
+        console.log(res);
+        if (res.status === 200) {
+          history.push("/");
+          return res.json();
+        }
+      })
+  };
+}
+
 export function userLogin(url, payload, history) {
   return function (dispatch) {
     fetch(url, {
@@ -28,7 +48,7 @@ export function userLogin(url, payload, history) {
           return res.json();
         }
       })
-      .then((user) => {
+      .then(({ user }) => {
         user && localStorage.setItem("authToken", user.token);
         dispatch({ type: USER, payload: { ...user } });
       });

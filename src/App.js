@@ -6,6 +6,9 @@ import Login from "./components/Login";
 import Error from "./components/Error";
 import SignUp from "./components/SignUp";
 import "./style.css";
+import UserProfile from "./components/UserProfile";
+import EditProfile from "./components/EditProfile";
+import NewArticle from "./components/NewArticle";
 
 class App extends Component {
   render() {
@@ -16,6 +19,9 @@ class App extends Component {
           <Route path="/" component={Articles} exact />
           <Route path="/login" component={Login} />
           <Route path="/register" component={SignUp} />
+          <Route path="/profile/:slug" component={UserProfile} />
+          <Route path="/editProfile" component={EditProfile} />
+          <Route path="/newArticle" component={NewArticle} />
           <Route component={Error} />
         </Switch>
       </>

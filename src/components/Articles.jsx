@@ -17,15 +17,15 @@ class Articles extends Component {
     const { articles } = this.props;
 
     return (
-      <div>
+      <div className="flex">
         {articles.map((article) => {
           return (
-            <div className="articles-container" key={uuid()}>
+            <div className="articles-container flex-basis" key={uuid()}>
               <div className="card news-card">
                 <img
-                  src={`https://picsum.photos/id/${Math.floor(
+                  src={`https://source.unsplash.com/collection/{${Math.floor(
                     Math.random() * 100
-                  )}/200/600`}
+                  )}/1600x900`}
                   alt={article.author.username}
                 />
                 <div className="card-section">
@@ -54,7 +54,10 @@ class Articles extends Component {
                       />
                     </div>
                     <div className="news-card-author-name">
-                      By <Link to="/">{article.author.username}</Link>
+                      By{" "}
+                      <Link to={`/profile/${article.author.username}`}>
+                        {article.author.username}
+                      </Link>
                     </div>
                   </div>
                 </div>
