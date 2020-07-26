@@ -1,4 +1,4 @@
-import { ALL_ARTICLES, ALL_TAGS, USER } from "./types";
+import { ALL_ARTICLES, ALL_TAGS, USER, ARTICLE } from "./types";
 
 export function allArticles(payload) {
   return {
@@ -15,6 +15,20 @@ export function fetchArticle(url) {
   };
 }
 
+export function singleArticle(url) {
+  return function (dispatch) {
+    fetch(url, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        authorization: `Token ${localStorage.authToken}`,
+      },
+    })
+      .then((res) => res.json())
+      .then(({ article }) => dispatch({ type: ARTICLE, payload: article }));
+  };
+}
+
 export function addArticle(url, payload, history) {
   return function (dispatch) {
     fetch(url, {
@@ -24,14 +38,13 @@ export function addArticle(url, payload, history) {
         authorization: `Token ${localStorage.authToken}`,
       },
       body: JSON.stringify({ article: payload }),
-    })
-      .then((res) => {
-        console.log(res);
-        if (res.status === 200) {
-          history.push("/");
-          return res.json();
-        }
-      })
+    }).then((res) => {
+      console.log(res);
+      if (res.status === 200) {
+        history.push("/");
+        return res.json();
+      }
+    });
   };
 }
 

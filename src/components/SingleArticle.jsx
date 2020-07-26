@@ -1,30 +1,34 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
+import { connect } from "react-redux";
+import { singleArticle } from "../store/actions";
 
 class SingleArticle extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      article: "",
-    };
-  }
-
   componentDidMount() {
     const slug = this.props.match.params.slug;
     const url = `https://conduit.productionready.io/api/articles/${slug}`;
-    fetch(url, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        authorization: `Token ${localStorage.authToken}`,
-      },
-    })
-      .then((res) => res.json())
-      .then(({ article }) => this.setState({ article }));
+    this.props.dispatch(singleArticle(url));
   }
 
+  handleDelete = () => {
+    const slug = this.props.match.params.slug;
+    const url = `https://conduit.productionready.io/api/articles/${slug}`;
+    fetch(url, {
+      method: "DELETE",
+      headers: {
+        "content-type": "application/json",
+        authorization: `Token ${localStorage.authToken}`,
+      },
+    }).then((res) => {
+      if (res.status === 200) {
+        return this.props.history.push("/");
+      }
+    });
+  };
+
   render() {
-    const { article } = this.state;
+    const { article } = this.props;
+    const { user } = this.props;
     if (!article) {
       return <h1 className="text-centre">Loading...</h1>;
     }
@@ -51,13 +55,12 @@ class SingleArticle extends Component {
               <i className="fa fa-heart"></i>
               <span> Like</span>
             </button>
-
             <div className="news-card-author">
               <div className="news-card-author-image">
                 <img
                   src={article.author.image}
                   className="article-image"
-                  alt="user"
+                  alt={article.author.username}
                 />
               </div>
               <div className="news-card-author-name">
@@ -69,12 +72,28 @@ class SingleArticle extends Component {
             </div>
           </div>
         </div>
-        <button className="card-user-profile-button button hollow secondary">
-          <Link to="/editProfile">Edit article</Link>
-        </button>
+        {article.author.username === user.username ? (
+          <>
+            <button className="card-user-profile-button button hollow secondary">
+              <Link to={`/editArticle/${article.slug}`}>Edit article</Link>
+            </button>
+            <button
+              className="card-user-profile-button button hollow secondary"
+              onClick={this.handleDelete}
+            >
+              Delete
+            </button>
+          </>
+        ) : (
+          ""
+        )}
       </div>
     );
   }
 }
 
-export default SingleArticle;
+function mapState(state) {
+  return { ...state };
+}
+
+export default connect(mapState)(SingleArticle);

@@ -1,9 +1,10 @@
 import { createStore, applyMiddleware } from "redux";
 import { composeWithDevTools } from "redux-devtools-extension";
-import { ALL_ARTICLES, ALL_TAGS, USER } from "./types";
+import { ALL_ARTICLES, ALL_TAGS, USER, ARTICLE } from "./types";
 
 const initialState = {
   articles: [],
+  article: "",
   tags: [],
   user: {},
 };
@@ -12,6 +13,8 @@ export function reducer(state = initialState, action) {
   switch (action.type) {
     case ALL_ARTICLES:
       return { ...state, articles: action.payload };
+    case ARTICLE:
+      return { ...state, article: action.payload };
     case ALL_TAGS:
       return { ...state, tags: action.payload };
     case USER:

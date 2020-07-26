@@ -4,7 +4,7 @@ class Error extends Component {
   render() {
     return (
       <div>
-        <h1>Page Cannot be found. Try Again</h1>
+        <h1 className='text-centre'>Page Cannot be found. Try Again</h1>
       </div>
     );
   }
