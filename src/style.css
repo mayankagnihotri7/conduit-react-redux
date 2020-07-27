@@ -26,6 +26,10 @@ body {
   border-radius: 30px;
 }
 
+.like-btn {
+  background-color: crimson !important;
+}
+
 .active {
   box-shadow: 7px 7px 5px 0px rgba(0, 0, 0, 0.75);
 }

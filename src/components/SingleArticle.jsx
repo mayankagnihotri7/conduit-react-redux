@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import { singleArticle } from "../store/actions";
 import Comment from "./Comment";
+import { ARTICLE } from "../store/types";
 
 class SingleArticle extends Component {
   componentDidMount() {
@@ -10,6 +11,24 @@ class SingleArticle extends Component {
     const url = `https://conduit.productionready.io/api/articles/${slug}`;
     this.props.dispatch(singleArticle(url));
   }
+
+  handleLike = () => {
+    let { slug, favorited } = this.props.article;
+    let url = `https://conduit.productionready.io/api/articles/${slug}/favorite`;
+    let method = favorited ? "DELETE" : "POST";
+    fetch(url, {
+      method,
+      headers: {
+        "content-type": "application/json",
+        authorization: `Token ${localStorage.authToken}`,
+      },
+    })
+      .then((res) => res.json())
+      .then(({ article }) => {
+        this.props.dispatch({ type: ARTICLE, payload: article });
+        return this.props.history.push(`/articles/${slug}`);
+      });
+  };
 
   handleDelete = () => {
     const slug = this.props.match.params.slug;
@@ -52,10 +71,20 @@ class SingleArticle extends Component {
               </h4>
               <p className="news-card-description">{article.description}</p>
             </article>
-            <button className="button button-like">
-              <i className="fa fa-heart"></i>
-              <span> Like</span>
-            </button>
+            {article.favorited ? (
+              <button
+                className="button button-like like-btn"
+                onClick={this.handleLike}
+              >
+                <i className="fa fa-heart"></i>
+                <span> UnLike</span>
+              </button>
+            ) : (
+              <button className="button button-like" onClick={this.handleLike}>
+                <i className="fa fa-heart"></i>
+                <span> Like</span>
+              </button>
+            )}
             <div className="news-card-author">
               <div className="news-card-author-image">
                 <img
