@@ -1,4 +1,4 @@
-import { ALL_ARTICLES, ALL_TAGS, USER, ARTICLE } from "./types";
+import { ALL_ARTICLES, ALL_TAGS, USER, ARTICLE, COMMENT } from "./types";
 
 export function allArticles(payload) {
   return {
@@ -12,6 +12,17 @@ export function fetchArticle(url) {
     fetch(url)
       .then((res) => res.json())
       .then(({ articles }) => dispatch(allArticles(articles)));
+  };
+}
+
+export function fetchComments(url) {
+  return function (dispatch) {
+    fetch(url, {
+      method: "GET",
+      headers: { "content-type": "application/json" },
+    })
+      .then((res) => res.json())
+      .then(({ comments }) => dispatch({ type: COMMENT, payload: comments }));
   };
 }
 

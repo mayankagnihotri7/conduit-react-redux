@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import { singleArticle } from "../store/actions";
+import Comment from "./Comment";
 
 class SingleArticle extends Component {
   componentDidMount() {
@@ -87,6 +88,7 @@ class SingleArticle extends Component {
         ) : (
           ""
         )}
+        <Comment />
       </div>
     );
   }
