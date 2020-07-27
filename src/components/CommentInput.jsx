@@ -33,7 +33,7 @@ class CommentInput extends Component {
       })
       .then(({ comment }) => {
         if (comment) {
-          return this.props.history.push(`articles/${slug}`);
+          return this.props.history.push(`/articles/${slug}`);
         }
       });
   };

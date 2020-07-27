@@ -1,13 +1,9 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
+import { VISIT_USER } from "../store/types";
 
 class UserProfile extends Component {
-  constructor(props) {
-    super(props);
-    this.state = { profile: "" };
-  }
-
   componentDidMount() {
     let slug = this.props.match.params.slug;
     let url = `https://conduit.productionready.io/api/profiles/${slug}`;
@@ -19,11 +15,31 @@ class UserProfile extends Component {
       },
     })
       .then((res) => res.json())
-      .then(({ profile }) => this.setState({ profile }));
+      .then(({ profile }) => {
+        return this.props.dispatch({ type: VISIT_USER, payload: profile });
+      });
   }
 
+  handleFollow = (following, username) => {
+    let slug = this.props.match.params.slug;
+    let url = `https://conduit.productionready.io/api/profiles/${slug}/follow`;
+    let method = following ? "DELETE" : "POST";
+    fetch(url, {
+      method,
+      headers: {
+        "content-type": "application/json",
+        authorization: `Token ${localStorage.authToken}`,
+      },
+    })
+      .then((res) => res.json())
+      .then(({ profile }) => {
+        this.props.dispatch({ type: VISIT_USER, payload: profile });
+        this.props.history.push(`/profile/${username}`);
+      });
+  };
+
   render() {
-    let { username, image, bio } = this.state.profile;
+    let { username, image, bio, following } = this.props.visitUser;
     return (
       <div className="card-user-profile articles-container">
         <img
@@ -46,9 +62,22 @@ class UserProfile extends Component {
         </div>
 
         <div className="card-user-profile-actions">
-          <button className="card-user-profile-button button hollow">
-            Follow
-          </button>
+          {following ? (
+            <button
+              className="card-user-profile-button button hollow"
+              onClick={() => this.handleFollow(following, username)}
+            >
+              Unfollow
+            </button>
+          ) : (
+            <button
+              className="card-user-profile-button button hollow"
+              onClick={() => this.handleFollow(following, username)}
+            >
+              Follow
+            </button>
+          )}
+          {}
           <button className="card-user-profile-button button hollow secondary">
             <Link to="/editProfile">Edit Profile</Link>
           </button>

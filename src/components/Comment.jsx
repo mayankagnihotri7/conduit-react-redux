@@ -29,8 +29,8 @@ class Comment extends Component {
   };
 
   render() {
-    console.log(this.props.comments, '..................');
-    const { comments } = this.props;
+    console.log(this.props.comments, "..................");
+    const { comments, user } = this.props;
     return (
       <div className="comment-section-container">
         <CommentInput />
@@ -56,12 +56,16 @@ class Comment extends Component {
               <div className="comment-section-text">
                 <p>{comment.body}</p>
               </div>
-              <button
-                className="button secondary small"
-                onClick={() => this.handleDelete(comment.id)}
-              >
-                Delete
-              </button>
+              {comment.author.username === user.username ? (
+                <button
+                  className="button secondary small"
+                  onClick={() => this.handleDelete(comment.id)}
+                >
+                  Delete
+                </button>
+              ) : (
+                ""
+              )}
             </div>
           );
         })}
