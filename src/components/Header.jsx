@@ -54,10 +54,7 @@ class Header extends Component {
                         </NavLink>
                       </li>
                       <li>
-                        <NavLink
-                          activeClassName="active"
-                          to={`/profile/${user.username}`}
-                        >
+                        <NavLink activeClassName="active" to={`/profile`}>
                           {user.username}
                         </NavLink>
                       </li>

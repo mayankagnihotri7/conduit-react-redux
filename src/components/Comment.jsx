@@ -29,7 +29,6 @@ class Comment extends Component {
   };
 
   render() {
-    console.log(this.props.comments, "..................");
     const { comments, user } = this.props;
     return (
       <div className="comment-section-container">
@@ -46,7 +45,7 @@ class Comment extends Component {
                 />
                 <div className="comment-section-name">
                   <h5>
-                    <Link to={`/profile/${comment.author.username}`}>
+                    <Link to={`/profiles/${comment.author.username}`}>
                       {comment.author.username}
                     </Link>
                   </h5>

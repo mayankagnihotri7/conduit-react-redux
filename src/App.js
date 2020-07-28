@@ -11,6 +11,7 @@ import EditProfile from "./components/EditProfile";
 import NewArticle from "./components/NewArticle";
 import SingleArticle from "./components/SingleArticle";
 import EditArticle from "./components/EditArticle";
+import ViewProfile from "./components/ViewProfile";
 
 class App extends Component {
   render() {
@@ -21,7 +22,8 @@ class App extends Component {
           <Route path="/" component={Articles} exact />
           <Route path="/login" component={Login} />
           <Route path="/register" component={SignUp} />
-          <Route path="/profile/:slug" component={UserProfile} />
+          <Route path="/profile" component={UserProfile} />
+          <Route path="/profiles/:slug" component={ViewProfile} />
           <Route path="/editProfile" component={EditProfile} />
           <Route path="/articles/:slug" component={SingleArticle} />
           <Route path="/editArticle/:slug" component={EditArticle} />

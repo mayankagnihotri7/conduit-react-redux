@@ -1,94 +1,79 @@
 import React, { Component } from "react";
-import { fetchArticle } from "../store/actions";
+import { Link, withRouter } from "react-router-dom";
 import uuid from "react-uuid";
-import { Link } from "react-router-dom";
 import { connect } from "react-redux";
-import { ARTICLE, ALL_ARTICLES } from "../store/types";
+import { MY_ARTICLES } from "../store/types";
 
-class Articles extends Component {
+class FilterArticles extends Component {
   componentDidMount() {
-    this.props.dispatch(
-      fetchArticle(
-        "https://conduit.productionready.io/api/articles?limit=20&offset=0"
-      )
-    );
-  }
-
-  handleLike = () => {
-    let { slug, favorited } = this.props.article;
-    let url = `https://conduit.productionready.io/api/articles/${slug}/favorite`;
-    let method = favorited ? "DELETE" : "POST";
+    const { username } = this.props.user;
+    let url = `https://conduit.productionready.io/api/articles?author=${username}&limit=5&offset=0`;
     fetch(url, {
-      method,
-      headers: {
-        "content-type": "application/json",
-        authorization: `Token ${localStorage.authToken}`,
-      },
+      method: "GET",
+      headers: { "content-type": "application/json" },
+      authorization: `Token ${localStorage.authToken}`,
     })
       .then((res) => res.json())
-      .then(({ article }) => {
-        this.props.dispatch({ type: ARTICLE, payload: article });
-        return this.props.history.push(`/articles/${slug}`);
+      .then(({ articles }) => {
+        this.props.dispatch({ type: MY_ARTICLES, payload: articles });
+        return this.props.history.push(`/profile/${username}`);
       });
-  };
+  }
 
-  handleFilter = (activeTab) => {
-    let myFeed = `https://conduit.productionready.io/api/articles/feed?limit=10&offset=0`;
-    let globalFeed = `https://conduit.productionready.io/api/articles?limit=10&offset=0`;
+  handleFilter(activeTab) {
+    const { username } = this.props.user;
+    let articleUrl = `https://conduit.productionready.io/api/articles?author=${username}&limit=5&offset=0`;
+    let favoriteUrl = `https://conduit.productionready.io/api/articles?favorited=${username}&limit=5&offset=0`;
     switch (activeTab) {
-      case "myFeed":
-        return fetch(myFeed, {
+      case "myArticles":
+        return fetch(articleUrl, {
           method: "GET",
-          headers: {
-            "content-type": "application/json",
-            authorization: `Token ${localStorage.authToken}`,
-          },
+          headers: { "content-type": "application/json" },
+          authorization: `Token ${localStorage.authToken}`,
         })
           .then((res) => res.json())
-          .then(({ articles }) =>
-            this.props.dispatch({ type: ALL_ARTICLES, payload: articles })
-          );
-      case "globalFeed":
-        return fetch(globalFeed, {
+          .then(({ articles }) => {
+            this.props.dispatch({ type: MY_ARTICLES, payload: articles });
+            return this.props.history.push(`/profile/${username}`);
+          });
+      case "favoriteArticles":
+        return fetch(favoriteUrl, {
           method: "GET",
-          headers: {
-            "content-type": "application/json",
-            authorization: `Token ${localStorage.authToken}`,
-          },
+          headers: { "content-type": "application/json" },
+          authorization: `Token ${localStorage.authToken}`,
         })
           .then((res) => res.json())
-          .then(({ articles }) =>
-            this.props.dispatch({ type: ALL_ARTICLES, payload: articles })
-          );
+          .then(({ articles }) => {
+            this.props.dispatch({ type: MY_ARTICLES, payload: articles });
+            return this.props.history.push(`/profile/${username}`);
+          });
       default:
         return activeTab;
     }
-  };
+  }
 
   render() {
-    const { articles } = this.props;
-
+    const { myArticles } = this.props;
     return (
       <>
-        <div
-          className="mobile-app-toggle articles-container"
-          data-mobile-app-toggle
-        >
+        <div className="mobile-app-toggle" data-mobile-app-toggle>
           <button
             className="button is-active"
-            onClick={() => this.handleFilter("myFeed")}
+            onClick={() => this.handleFilter("myArticles")}
           >
-            My Feed
+            My Articles
           </button>
           <button
             className="button"
-            onClick={() => this.handleFilter("globalFeed")}
+            onClick={() => this.handleFilter("favoriteArticles")}
           >
-            Global Feed
+            Favorite Articles
           </button>
         </div>
-        <div className="flex">
-          {articles.map((article) => {
+        {!myArticles ? (
+          <h1>Click on button to get articles</h1>
+        ) : (
+          myArticles.map((article) => {
             return (
               <div className="articles-container flex-basis" key={uuid()}>
                 <div className="card news-card">
@@ -104,7 +89,7 @@ class Articles extends Component {
                     </div>
                     <article className="news-card-article">
                       <h4 className="news-card-title">
-                        <Link to={`articles/${article.slug}`}>
+                        <Link to={`/articles/${article.slug}`}>
                           {article.title}
                         </Link>
                       </h4>
@@ -149,8 +134,8 @@ class Articles extends Component {
                 </div>
               </div>
             );
-          })}
-        </div>
+          })
+        )}
       </>
     );
   }
@@ -160,4 +145,4 @@ function mapState(state) {
   return { ...state };
 }
 
-export default connect(mapState)(Articles);
+export default connect(mapState)(withRouter(FilterArticles));

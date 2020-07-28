@@ -7,6 +7,8 @@ import {
   ARTICLE,
   COMMENT,
   VISIT_USER,
+  MY_ARTICLES,
+  VIEW_USER,
 } from "./types";
 
 const initialState = {
@@ -16,6 +18,8 @@ const initialState = {
   user: {},
   visitUser: {},
   comments: [],
+  myArticles: [],
+  viewUser: {},
 };
 
 export function reducer(state = initialState, action) {
@@ -32,6 +36,10 @@ export function reducer(state = initialState, action) {
       return { ...state, visitUser: action.payload };
     case COMMENT:
       return { ...state, comments: action.payload };
+    case MY_ARTICLES:
+      return { ...state, myArticles: action.payload };
+    case VIEW_USER:
+      return { ...state, viewUser: action.payload };
     default:
       return state;
   }
